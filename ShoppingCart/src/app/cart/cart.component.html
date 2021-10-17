@@ -1,0 +1,106 @@
+<div *ngIf="status == false">
+    <table class="table table-hover table-bordered">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Image</th>
+                <th>Price</th>
+                <th>Promotion</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of shoppingCart; let i=index">
+                <th>{{i+1}}</th>
+                <td>{{item.product.productName}}</td>
+                <td><img src={{item.product.image}} alt="clock" width="50px" height="60px"></td>
+                <td>{{item.product.price}}</td>
+                <td>{{item.product.promotionPrice}}</td>
+                <td>
+                    <input #quan type="number" class="form-control" min="1" [value]="item.quantity" (change)="valueChange(i, quan)">
+                </td>
+                <td>{{(item.product.price * (100 - item.product.promotionPrice)/100)* item.quantity}}</td>
+                <td><button class="btn btn-sm btn-danger" (click)="delete()"> Delete </button></td>
+            </tr>
+            <div>
+                <p>Toatl Price :{{totalPrice}}</p>
+            </div>
+        </tbody>
+    </table>
+    <div class="card">
+        <div class="card-header">Thông tin khách hàng</div>
+        <div class="card-body">
+            <form [formGroup]="formCheckout" (ngSubmit)="submitForm()">
+                <div class="mb-3">
+                    <label class="form-label">Họ tên</label>
+                    <input type="text" formControlName="userName" placeholder="Họ tên" class="form-control">
+                    <div *ngIf="userName?.invalid && (phoneNumber?.dirty || phoneNumber?.touched)" class="text-danger">
+                        <div *ngIf="userName?.errors?.required">Username invalid</div>
+                    </div>
+                </div>
+                <div class="mb-3"><label class="form-label">Số điện thoại</label>
+                    <input type="number" formControlName="phoneNumber" placeholder="Phone number" class="form-control">
+                    <div *ngIf="phoneNumber?.invalid && (phoneNumber?.dirty || phoneNumber?.touched)" class="alert alert-danger">
+                        Require
+                    </div>
+                </div>
+                <div class="mb-3"><label class="form-label">Địa chỉ</label>
+                    <textarea formControlName="address" rows="3" class="form-control"></textarea>
+                    <div *ngIf="address?.invalid && (address?.dirty || address?.touched)" class="alert alert-danger">
+                        Require
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary"> Submit </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="card" *ngIf="status == true">
+    <div role="alert" class="alert alert-success"> Đơn hàng của bạn đang chờ được xác nhận, chúng tôi sẽ liên hệ sau. </div>
+    <div class="card-header">Thông tin đơn hàng</div>
+    <div class="card-body">
+        <p><b>Họ tên: {{InfoUserName}}</b></p>
+        <p><b>Số ĐT: {{InfoUserPhone}}</b></p>
+        <p><b>Địa chỉ: {{InfoUserAddress}}</b></p>
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Image</th>
+                    <th>Price</th>
+                    <th>Promotion</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of shoppingCart; let i=index">
+                    <th>{{i+1}}</th>
+                    <td>{{item.product.productName}}</td>
+                    <td><img src={{item.product.image}} alt="clock" width="50px" height="60px"></td>
+                    <td>{{item.product.price}}</td>
+                    <td>{{item.product.promotionPrice}}</td>
+                    <td>
+                        <input #quan type="number" class="form-control" min="1" [value]="item.quantity" (change)="valueChange(i, quan)">
+                    </td>
+                    <td>{{(item.product.price * (100 - item.product.promotionPrice)/100)* item.quantity}}</td>
+                </tr>
+                <div>
+                    <p>Toatl Price :{{totalPrice}}</p>
+                </div>
+            </tbody>
+            <tfoot>
+                <tr class="text-right">
+                    <td colspan="8">Tổng phải thanh toán: 240000</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
